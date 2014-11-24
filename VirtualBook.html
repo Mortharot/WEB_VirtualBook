@@ -5,11 +5,12 @@
 
 		var pic1 = new Image();
 		var pic2 = new Image();
-		pic2.src = "img2.jpg";
+		
 		var canvas01;
 		var canv_ctx;
 		
-		var progress = 0;
+		var isMouseDown = false;
+		/*var progress = 0;
 		
 		function animate()
 		{
@@ -33,11 +34,37 @@
 				progress += 2;
 				setTimeout(animate, 100);
 			}
+		}*/
+		
+		function show_progress(progress)
+		{
+			if(progress <= 100)
+			{
+				var full_width = pic1.width;
+				var width1 = full_width*(100-progress)/100;
+				var width2 = full_width*(progress/2)/100;
+				var height = pic1.height;
+				
+				var shadow_width = 20*progress/100;
+				
+				canv_ctx.clearRect(0,0,canvas01.width, canvas01.height);
+				canv_ctx.drawImage(pic1,0,0,width1,height,0,0,width1,height);
+				//canv_ctx.drawImage(pic2,0,0,width2+full_width/100*(100-progress),height,width1,0,width2,height);
+				canv_ctx.drawImage(pic2,0,0,width2,height,width1,0,width2,height);
+				canv_ctx.drawImage(pic2,width1+width2,0,width2,height,width1+width2,0,width2,height);
+				canv_ctx.fillStyle = "RGBA(0,0,0,0.4)";
+				canv_ctx.fillRect(width1-shadow_width,0,shadow_width,height);
+				canv_ctx.fillRect(width1+width2,0,20-shadow_width,height);
+				//progress += 2;
+				//setTimeout(animate, 100);
+			}
 		}
 		
 		function init()
 		{
-			pic1.src = "img1.jpg";
+		pic1.src = "img1.jpg";
+		pic2.src = "img2.jpg";
+		
 			pic1.onload = function()
 						{
 							canvas01 = document.getElementById("canv-01"); 
@@ -45,12 +72,34 @@
 							canvas01.height =  pic1.height;
 							canv_ctx = canvas01.getContext("2d");
 							
-							animate();
+							//animate();
+							show_progress(0);
 						}
+		}
+		
+		function mouseMove(e)
+		{
+			var xPos = e.clientX - canvas01.offsetLeft;
+			//var yPos = e.clientY - canvas01.offsetTop;
+			var progress = 100 - Math.round(100 * xPos / canvas01.width);
+			if(isMouseDown)
+			{
+				show_progress(progress);
+			}
+		}
+		
+		function mouseDown()
+		{
+			isMouseDown = true;
+		}
+		
+		function mouseUp()
+		{
+			isMouseDown = false;
 		}
 		</script>
 	</head>
 	<body onLoad="init()">
-		<canvas id="canv-01" width="800" height="600" style="border: 2px solid"></canvas>
+		<canvas id="canv-01" onmousemove="mouseMove(event)" onmousedown="mouseDown()" onmouseup="mouseUp()" width="800" height="600" style="border: 2px solid"></canvas>
 	</body>
 </html>
