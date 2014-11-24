@@ -10,9 +10,11 @@
 		var canv_ctx;
 		
 		var isMouseDown = false;
-		/*var progress = 0;
+		var isAnimating = false;
+		var progress = 0;
+		var animSleepTime = 20;
 		
-		function animate()
+		/*function animate()
 		{
 			if(progress <= 100)
 			{
@@ -36,7 +38,7 @@
 			}
 		}*/
 		
-		function show_progress(progress)
+		function show_progress()
 		{
 			if(progress <= 100)
 			{
@@ -49,14 +51,34 @@
 				
 				canv_ctx.clearRect(0,0,canvas01.width, canvas01.height);
 				canv_ctx.drawImage(pic1,0,0,width1,height,0,0,width1,height);
-				//canv_ctx.drawImage(pic2,0,0,width2+full_width/100*(100-progress),height,width1,0,width2,height);
 				canv_ctx.drawImage(pic2,0,0,width2,height,width1,0,width2,height);
 				canv_ctx.drawImage(pic2,width1+width2,0,width2,height,width1+width2,0,width2,height);
 				canv_ctx.fillStyle = "RGBA(0,0,0,0.4)";
 				canv_ctx.fillRect(width1-shadow_width,0,shadow_width,height);
 				canv_ctx.fillRect(width1+width2,0,20-shadow_width,height);
-				//progress += 2;
-				//setTimeout(animate, 100);
+
+			}
+		}
+		
+		function animate()
+		{
+			if(progress > 50 && progress < 100)
+			{
+				isAnimating = true;
+				progress += 1;
+				show_progress();
+				setTimeout(animate,animSleepTime);
+			}
+			else if (progress <= 50 && progress > 0)
+			{
+				isAnimating = true;
+				progress -= 1;
+				show_progress();
+				setTimeout(animate,animSleepTime);
+			}
+			else
+			{
+				isAnimating = false;
 			}
 		}
 		
@@ -79,23 +101,30 @@
 		
 		function mouseMove(e)
 		{
-			var xPos = e.clientX - canvas01.offsetLeft;
-			//var yPos = e.clientY - canvas01.offsetTop;
-			var progress = 100 - Math.round(100 * xPos / canvas01.width);
 			if(isMouseDown)
 			{
+				var xPos = e.clientX - canvas01.offsetLeft;
+				//var yPos = e.clientY - canvas01.offsetTop;
+				progress = 100 - Math.round(100 * xPos / canvas01.width);
 				show_progress(progress);
 			}
 		}
 		
 		function mouseDown()
 		{
-			isMouseDown = true;
+			if(!isAnimating)
+			{
+				isMouseDown = true;
+			}
 		}
 		
 		function mouseUp()
 		{
-			isMouseDown = false;
+			if(!isAnimating)
+			{
+				isMouseDown = false;
+				animate();
+			}
 		}
 		</script>
 	</head>
