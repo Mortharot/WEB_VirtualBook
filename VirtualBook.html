@@ -25,7 +25,7 @@
 		
 		function show_progress()
 		{
-			if(progress <= 100)
+			if(progress <= 100 && progress >= 0)
 			{
 				var width1 = VirtualBook_width*(100-progress)/100;
 				var width2 = VirtualBook_width*(progress/2)/100;
@@ -37,19 +37,39 @@
 				
 				if(isNext)
 				{
-					VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,width1,height,0,0,width1,height);
-					VirtualBook_context.drawImage(VirtualBook_next_picture,0,0,width2,height,width1,0,width2,height);
-					VirtualBook_context.drawImage(VirtualBook_next_picture,width1+width2,0,width2,height,width1+width2,0,width2,height);
+					if(VirtualBook_current_index < VirtualBook_images_link_array.length - 1)
+					{
+						VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,width1,height,0,0,width1,height);
+						VirtualBook_context.drawImage(VirtualBook_next_picture,0,0,width2,height,width1,0,width2,height);
+						VirtualBook_context.drawImage(VirtualBook_next_picture,width1+width2,0,width2,height,width1+width2,0,width2,height);
+					
+						VirtualBook_context.fillStyle = "RGBA(0,0,0,0.4)";
+						VirtualBook_context.fillRect(width1-shadow_width,0,shadow_width,height);
+						VirtualBook_context.fillRect(width1+width2,0,20-shadow_width,height);
+					}
+					else
+					{
+						VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,VirtualBook_width,height,0,0,VirtualBook_width,height);
+					}
 				}
 				else
 				{
-					VirtualBook_context.drawImage(VirtualBook_previous_picture,0,0,width1,height,0,0,width1,height);
-					VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,width2,height,width1,0,width2,height);
-					VirtualBook_context.drawImage(VirtualBook_current_picture,width1+width2,0,width2,height,width1+width2,0,width2,height);
+					if(VirtualBook_current_index > 0)
+					{
+						VirtualBook_context.drawImage(VirtualBook_previous_picture,0,0,width1,height,0,0,width1,height);
+						VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,width2,height,width1,0,width2,height);
+						VirtualBook_context.drawImage(VirtualBook_current_picture,width1+width2,0,width2,height,width1+width2,0,width2,height);
+						
+						VirtualBook_context.fillStyle = "RGBA(0,0,0,0.4)";
+						VirtualBook_context.fillRect(width1-shadow_width,0,shadow_width,height);
+						VirtualBook_context.fillRect(width1+width2,0,20-shadow_width,height);
+					}
+					else
+					{
+						VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,VirtualBook_width,height,0,0,VirtualBook_width,height);
+					}
+					
 				}
-				VirtualBook_context.fillStyle = "RGBA(0,0,0,0.4)";
-				VirtualBook_context.fillRect(width1-shadow_width,0,shadow_width,height);
-				VirtualBook_context.fillRect(width1+width2,0,20-shadow_width,height);
 
 			}
 		}
@@ -74,19 +94,21 @@
 			{
 				if(isNext)
 				{
-					if(VirtualBook_current_index < VirtualBook_images_link_array.lenght)
+					if(VirtualBook_current_index < VirtualBook_images_link_array.length - 1 && progress == 100)
 					{
 						++VirtualBook_current_index;
 						set_pictures();
+						progress = 0;
 					}
 					show_progress();
 				}
 				else
 				{
-					if(VirtualBook_current_index > 0)
+					if(VirtualBook_current_index > 0 && progress == 0)
 					{
 						--VirtualBook_current_index;
 						set_pictures();
+						progress = 100;
 					}
 					show_progress();
 				}
@@ -121,16 +143,16 @@
 			}
 			else
 			{
-				VirtualBook_previous_picture = null;
+				VirtualBook_previous_picture = 0;
 			}
 			
-			if(VirtualBook_current_index < VirtualBook_images_link_array.lenght)
+			//if(VirtualBook_current_index < VirtualBook_images_link_array.lenght)
 			{
 				VirtualBook_next_picture = VirtualBook_images_link_array[VirtualBook_current_index + 1];
 			}
-			else
+			//else
 			{
-				VirtualBook_next_picture = null;
+				//VirtualBook_next_picture = 0;
 			}
 		}
 		
@@ -151,8 +173,6 @@
 			//VirtualBook_previous_picture = VirtualBook_images_link_array[0];
 			//VirtualBook_current_picture = VirtualBook_images_link_array[1];
 			//VirtualBook_next_picture = VirtualBook_images_link_array[2];
-			
-			//todo wait till all loaded;
 			
 			VirtualBook_current_picture.onload = function()
 						{
