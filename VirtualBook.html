@@ -146,17 +146,17 @@
 				VirtualBook_previous_picture = 0;
 			}
 			
-			//if(VirtualBook_current_index < VirtualBook_images_link_array.lenght)
+			if(VirtualBook_current_index < VirtualBook_images_link_array.length - 1)
 			{
 				VirtualBook_next_picture = VirtualBook_images_link_array[VirtualBook_current_index + 1];
 			}
-			//else
+			else
 			{
-				//VirtualBook_next_picture = 0;
+				VirtualBook_next_picture = 0;
 			}
 		}
 		
-		function init(width, height, images_link_array)
+		function init(canvas_id, width, height, images_link_array)
 		{
 			VirtualBook_width = width;
 			VirtualBook_height = height;
@@ -170,17 +170,13 @@
 			VirtualBook_current_index = 0;
 			set_pictures();
 			
-			//VirtualBook_previous_picture = VirtualBook_images_link_array[0];
-			//VirtualBook_current_picture = VirtualBook_images_link_array[1];
-			//VirtualBook_next_picture = VirtualBook_images_link_array[2];
+			VirtualBook_canvas = document.getElementById(canvas_id); 
+			VirtualBook_canvas.width = VirtualBook_width; 
+			VirtualBook_canvas.height =  VirtualBook_height;
+			VirtualBook_context = VirtualBook_canvas.getContext("2d");
 			
 			VirtualBook_current_picture.onload = function()
 						{
-							VirtualBook_canvas = document.getElementById("canv-01"); 
-							VirtualBook_canvas.width = VirtualBook_width; 
-							VirtualBook_canvas.height =  VirtualBook_height;
-							VirtualBook_context = VirtualBook_canvas.getContext("2d");
-							
 							show_progress();
 						}
 		}
@@ -222,7 +218,7 @@
 		}
 		</script>
 	</head>
-	<body onLoad="init(858, 536, ['img0.jpg', 'img1.jpg', 'img2.jpg'])">
+	<body onLoad="init('canv-01',1000, 600, ['page0.jpg','page1-2.jpg','page3-4.jpg', 'page5-6.jpg', 'page7.jpg'])">
 		<canvas id="canv-01" onmousemove="mouseMove(event)" onmousedown="mouseDown(event)" onmouseup="mouseUp()" width="800" height="600" style="border: 2px solid"></canvas>
 	</body>
 </html>
