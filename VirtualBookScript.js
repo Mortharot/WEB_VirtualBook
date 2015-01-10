@@ -25,7 +25,11 @@ function VirtualBook_show_progress()
 		var width1 = VirtualBook_width*(100-VirtualBook_progress)/100;
 		var width2 = VirtualBook_width*(VirtualBook_progress/2)/100;
 		var height = VirtualBook_height;
-				
+		
+		var picture_width1 = VirtualBook_current_picture.width*(100-VirtualBook_progress)/100;
+		var picture_width2 = VirtualBook_current_picture.width*(VirtualBook_progress/2)/100;
+		var picture_height = VirtualBook_current_picture.height;
+		
 		var shadow_width = 20*VirtualBook_progress/100; //TODO modify?
 				
 		VirtualBook_context.clearRect(0,0,VirtualBook_canvas.width, VirtualBook_canvas.height);
@@ -34,9 +38,9 @@ function VirtualBook_show_progress()
 		{
 			if(VirtualBook_current_index < VirtualBook_images_link_array.length - 1)
 			{
-				VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,width1,height,0,0,width1,height);
-				VirtualBook_context.drawImage(VirtualBook_next_picture,0,0,width2,height,width1,0,width2,height);
-				VirtualBook_context.drawImage(VirtualBook_next_picture,width1+width2,0,width2,height,width1+width2,0,width2,height);
+				VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,picture_width1,picture_height,0,0,width1,height);
+				VirtualBook_context.drawImage(VirtualBook_next_picture,0,0,picture_width2,picture_height,width1,0,width2,height);
+				VirtualBook_context.drawImage(VirtualBook_next_picture,picture_width1+picture_width2,0,picture_width2,picture_height,width1+width2,0,width2,height);
 					
 				VirtualBook_context.fillStyle = "RGBA(0,0,0,0.4)";
 				VirtualBook_context.fillRect(width1-shadow_width,0,shadow_width,height);
@@ -44,16 +48,16 @@ function VirtualBook_show_progress()
 			}
 			else
 			{
-				VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,VirtualBook_width,height,0,0,VirtualBook_width,height);
+				VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,VirtualBook_current_picture.width,VirtualBook_current_picture.height,0,0,VirtualBook_width,height);
 			}
 		}
 		else
 		{
 			if(VirtualBook_current_index > 0)
 			{
-				VirtualBook_context.drawImage(VirtualBook_previous_picture,0,0,width1,height,0,0,width1,height);
-				VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,width2,height,width1,0,width2,height);
-				VirtualBook_context.drawImage(VirtualBook_current_picture,width1+width2,0,width2,height,width1+width2,0,width2,height);
+				VirtualBook_context.drawImage(VirtualBook_previous_picture,0,0,picture_width1,picture_height,0,0,width1,height);
+				VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,picture_width2,picture_height,width1,0,width2,height);
+				VirtualBook_context.drawImage(VirtualBook_current_picture,picture_width1+picture_width2,0,picture_width2,picture_height,width1+width2,0,width2,height);
 						
 				VirtualBook_context.fillStyle = "RGBA(0,0,0,0.4)";
 				VirtualBook_context.fillRect(width1-shadow_width,0,shadow_width,height);
@@ -61,7 +65,7 @@ function VirtualBook_show_progress()
 			}
 			else
 			{
-				VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,VirtualBook_width,height,0,0,VirtualBook_width,height);
+				VirtualBook_context.drawImage(VirtualBook_current_picture,0,0,VirtualBook_current_picture.width,VirtualBook_current_picture.height,0,0,VirtualBook_width,height);
 			}
 					
 		}
